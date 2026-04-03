@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IS_lab - Главная</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .api-link {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .api-link:hover {
+            background: #45a049;
+        }
+        .info {
+            background: #e7f3fe;
+            border-left: 4px solid #2196F3;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚀 IS_lab работает!</h1>
+    <p>Backend на Java Servlets успешно запущен на Tomcat 10.1.7</p>
+
+    <h2>Доступные эндпоинты:</h2>
+    <ul>
+        <li><strong>GET</strong> <a href="/api/hello" class="api-link">/api/hello</a> - приветственное сообщение (JSON)</li>
+    </ul>
+
+    <div class="info">
+        <strong>ℹ️ Информация:</strong><br>
+        API возвращает JSON ответ:<br>
+        <code>{"message": "Hello from Java Backend!", "status": "success"}</code>
+    </div>
+
+    <p style="margin-top: 30px; font-size: 12px; color: #666;">
+        Tomcat 10.1.7 | Jakarta Servlet 6.0.0 | Java 21
+    </p>
+</div>
+</body>
+</html>
