@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public class UserRepository {
 
-    // Маппер из ResultSet в User
     private static User mapUser(ResultSet rs) throws SQLException {
         User u = new User(
                 rs.getString("login"),
@@ -41,6 +40,18 @@ public class UserRepository {
     public static List<User> findAll() throws SQLException {
         String sql = "SELECT id, login, role, tenant_id FROM users";
         return DbHelper.query(sql, UserRepository::mapUser);
+    }
+
+    public static void update(User user) throws SQLException {
+        String sql = "UPDATE users SET login = ?, role = ?, tenant_id = ? WHERE id = ?";
+        try (var stmt = DbHelper.prepareStatement(sql,
+                user.getLogin(),
+                user.getRole(),
+                user.getTenantId() == null ? null : UUID.fromString(user.getTenantId()),
+                UUID.fromString(user.getId())
+        )) {
+            stmt.executeUpdate();
+        }
     }
 
     public static void create(User user, String rawPassword) throws SQLException {

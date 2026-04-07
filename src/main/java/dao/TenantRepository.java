@@ -1,6 +1,7 @@
 package dao;
 
 import models.Tenant;
+import models.User;
 import utils.DbHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,5 +34,32 @@ public class TenantRepository {
         )) {
             stmt.executeUpdate();
         }
+    }
+
+    public static void update(Tenant tenant) throws SQLException {
+        String sql = "UPDATE tenants SET name = ?, description = ? WHERE id = ?";
+        try (var stmt = DbHelper.prepareStatement(sql,
+                tenant.getName(),
+                tenant.getDescription(),
+                UUID.fromString(tenant.getId())
+        )) {
+            stmt.executeUpdate();
+        }
+    }
+
+    public static void delete(String id) throws SQLException {
+        String sql = "DELETE FROM tenants WHERE id = ?";
+        try (var stmt = DbHelper.prepareStatement(sql, UUID.fromString(id))) {
+            stmt.executeUpdate();
+        }
+    }
+
+    public static int getUserCount(String tenantId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM users WHERE tenant_id = ?";
+        return DbHelper.queryOne(sql, rs -> rs.getInt(1), UUID.fromString(tenantId));
+    }
+
+    public static List<User> getUsersByTenantId(String tenantId) throws SQLException {
+        return UserRepository.findAllByTenantId(tenantId);
     }
 }

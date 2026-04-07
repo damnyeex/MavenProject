@@ -1,0 +1,63 @@
+package servlets.tenant.handlers;
+
+import com.google.gson.Gson;
+import dao.TenantRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class DeleteTenantHandler {
+    private static final Gson gson = new Gson();
+
+    public static void handle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String pathInfo = req.getPathInfo();
+        if (pathInfo == null || "/".equals(pathInfo)) {
+            sendError(resp, 400, "Tenant ID is required");
+            return;
+        }
+
+        String tenantId = pathInfo.substring(1);
+
+        try {
+            // Проверка существования тенанта
+            var tenant = TenantRepository.findById(tenantId);
+            if (tenant == null) {
+                sendError(resp, 404, "Tenant not found");
+                return;
+            }
+
+            TenantRepository.delete(tenantId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Tenant deleted successfully. Users remain without tenant.");
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(gson.toJson(response));
+
+            System.out.println("Tenant deleted successfully: " + tenantId);
+
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+            sendError(resp, 500, "Database error: " + e.getMessage());
+        }
+    }
+
+    private static void sendError(HttpServletResponse resp, int statusCode, String message) throws IOException {
+        resp.setStatus(statusCode);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("success", false);
+        errorResponse.put("error", message);
+
+        resp.getWriter().write(gson.toJson(errorResponse));
+    }
+}

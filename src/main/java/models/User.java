@@ -1,16 +1,13 @@
 package models;
 
-import java.util.UUID;
-
 public class User {
     private String id;
     private String login;
-    private String password; // в реальном проекте хешировать
-    private String role;     // "ADMIN" или "USER"
-    private String tenantId; // для USER — ID тенанта; для ADMIN — null
+    private String password;
+    private String role;
+    private String tenantId;
 
     public User(String login, String password, String role, String tenantId) {
-        this.id = UUID.randomUUID().toString();
         this.login = login;
         this.password = password;
         this.role = role;
