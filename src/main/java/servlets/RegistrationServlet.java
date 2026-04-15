@@ -3,7 +3,6 @@ package servlets;
 import com.google.gson.Gson;
 import dao.UserRepository;
 import models.User;
-import utils.JwtUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,21 +65,6 @@ public class RegistrationServlet extends HttpServlet {
             newUser.setId(userId);
 
             UserRepository.create(newUser, password);
-            System.out.println("User created successfully with ID: " + userId);
-
-            // Генерация JWT
-            String token = JwtUtil.generateToken(
-                    UUID.fromString(userId),
-                    newUser.getLogin(),
-                    newUser.getRole()
-            );
-
-            // Установка cookie
-            jakarta.servlet.http.Cookie cookie = new jakarta.servlet.http.Cookie("token", token);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(24 * 60 * 60);
-            resp.addCookie(cookie);
 
             // Ответ
             resp.setContentType("application/json");
@@ -95,7 +79,6 @@ public class RegistrationServlet extends HttpServlet {
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
-            response.put("token", token);
             response.put("user", userMap);
 
             resp.getWriter().write(gson.toJson(response));

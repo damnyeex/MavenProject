@@ -41,4 +41,5 @@ build/
 data/
 *.db
 *.mv.db
-*.trace.db
+*.trace.db.idea/
+.env
