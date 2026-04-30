@@ -53,6 +53,9 @@ public class UpdateUserHandler {
             // Обновление полей
             String newLogin = (String) requestBody.get("login");
             String newPassword = (String) requestBody.get("password");
+            String newLastname = (String) requestBody.get("lastname");
+            String newFirstname = (String) requestBody.get("firstname");
+            String newMiddlename = (String) requestBody.get("middlename");
             String newRole = (String) requestBody.get("role");
             String newTenantId = (String) requestBody.get("tenantId");
 
@@ -72,6 +75,18 @@ public class UpdateUserHandler {
 
             if (newPassword != null && !newPassword.trim().isEmpty()) {
                 existingUser.setPassword(PasswordUtil.hash(newPassword));
+            }
+
+            if (newLastname != null && !newLastname.trim().isEmpty()) {
+                existingUser.setLastname(newLastname);
+            }
+
+            if (newFirstname != null && !newFirstname.trim().isEmpty()) {
+                existingUser.setFirstname(newFirstname);
+            }
+
+            if (newMiddlename != null && !newMiddlename.trim().isEmpty()) {
+                existingUser.setMiddlename(newMiddlename);
             }
 
             if (newRole != null && !newRole.trim().isEmpty()) {

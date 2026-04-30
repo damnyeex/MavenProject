@@ -36,7 +36,7 @@ public class AuthServlet extends HttpServlet {
                     return;
                 }
                 User user = UserRepository.findByLogin(login);
-                String token = JwtUtil.generateToken(UUID.fromString(user.getId()), user.getLogin(), user.getRole());
+                String token = JwtUtil.generateToken(UUID.fromString(user.getId()), user.getLogin(), user.getRole(), user.getLastname(), user.getFirstname(), user.getMiddlename());
 
                 jakarta.servlet.http.Cookie cookie = new jakarta.servlet.http.Cookie("token", token);
                 cookie.setHttpOnly(true);

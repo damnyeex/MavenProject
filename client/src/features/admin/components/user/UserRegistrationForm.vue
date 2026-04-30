@@ -11,6 +11,18 @@
                 <BaseInput type="password" v-model="form.password" required />
             </div>
             <div class="form-group">
+                <label>Фамилия</label>
+                <BaseInput v-model="form.lastname" required />
+            </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <BaseInput v-model="form.firstname" required />
+            </div>
+            <div class="form-group">
+                <label>Отчество</label>
+                <BaseInput v-model="form.middlename" required />
+            </div>
+            <div class="form-group">
                 <label>Роль</label>
                 <select v-model="form.role" class="base-select">
                     <option value="USER">Пользователь</option>
@@ -51,6 +63,9 @@ const emit = defineEmits(["user-created"]);
 const form = ref({
     login: "",
     password: "",
+    lastname: "",
+    firstname: "",
+    middlename: "",
     role: "USER",
     tenantId: "",
 });
@@ -95,6 +110,9 @@ const handleSubmit = async () => {
             form.value = {
                 login: "",
                 password: "",
+                lastname: "",
+                firstname: "",
+                middlename: "",
                 role: "USER",
                 tenantId: tenants.value[0]?.id || "",
             };

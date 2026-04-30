@@ -41,12 +41,6 @@ public class GetUserByIdHandler {
                 return;
             }
 
-            // Проверка прав: админ может видеть любого, обычный пользователь - только себя
-            if (!"ADMIN".equals(userRole) && !userIdAttr.equals(user.getId())) {
-                sendError(resp, 403, "Access denied: You can only view your own profile");
-                return;
-            }
-
             sendSuccess(resp, user);
 
         } catch (SQLException e) {

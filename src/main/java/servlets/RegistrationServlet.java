@@ -28,6 +28,9 @@ public class RegistrationServlet extends HttpServlet {
             String login = requestBody.get("login");
             String password = requestBody.get("password");
             String role = requestBody.get("role");
+            String lastname = requestBody.get("lastname");
+            String firstname = requestBody.get("firstname");
+            String middlename = requestBody.get("middlename");
             String tenantId = requestBody.get("tenantId");
 
             System.out.println("Registration attempt - login: " + login + ", role: " + role + ", tenantId: " + tenantId);
@@ -59,8 +62,21 @@ public class RegistrationServlet extends HttpServlet {
                 return;
             }
 
+            if (lastname == null || lastname.trim().isEmpty()) {
+                sendError(resp, 400, "Lastname is required");
+                return;
+            }
+            if (firstname == null || firstname.trim().isEmpty()) {
+                sendError(resp, 400, "Firstname is required");
+                return;
+            }
+            if (middlename == null || middlename.trim().isEmpty()) {
+                sendError(resp, 400, "Middlename is required");
+                return;
+            }
+
             // Создание пользователя с генерацией ID в одном месте
-            User newUser = new User(login, password, finalRole, tenantId);
+            User newUser = new User(login, password, finalRole, tenantId, lastname, firstname, middlename);
             String userId = UUID.randomUUID().toString();
             newUser.setId(userId);
 
@@ -75,6 +91,9 @@ public class RegistrationServlet extends HttpServlet {
             userMap.put("id", userId);
             userMap.put("login", newUser.getLogin());
             userMap.put("role", newUser.getRole());
+            userMap.put("lastname", newUser.getLastname());
+            userMap.put("firstname", newUser.getFirstname());
+            userMap.put("middlename", newUser.getMiddlename());
             userMap.put("tenantId", newUser.getTenantId());
 
             Map<String, Object> response = new HashMap<>();

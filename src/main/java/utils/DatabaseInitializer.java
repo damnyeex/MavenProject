@@ -12,20 +12,18 @@ public class DatabaseInitializer {
     public static void init() {
         try {
             createTablesIfNotExist();
+            addMissingColumns();
 
-            // Проверка админа
             User admin = UserRepository.findByLogin("admin");
             if (admin == null) {
                 System.out.println("Creating default admin user...");
-                User newAdmin = new User("admin", "admin123", "ADMIN", null);
+                User newAdmin = new User("admin", "admin123", "ADMIN", null, "Редькин", "Сергей", "Алексеевич");
                 newAdmin.setId(UUID.randomUUID().toString());
                 UserRepository.create(newAdmin, "admin123");
                 System.out.println("Default admin created successfully!");
             } else {
                 System.out.println("Admin user already exists");
-                // Проверка пароля админа
                 String storedHash = UserRepository.getPasswordHash("admin");
-                System.out.println("Stored password hash: " + storedHash);
                 System.out.println("Test 'admin123' -> " + (PasswordUtil.verify("admin123", storedHash) ? "OK" : "FAIL"));
             }
         } catch (SQLException e) {
@@ -48,6 +46,9 @@ public class DatabaseInitializer {
                 id UUID PRIMARY KEY,
                 login VARCHAR(50) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
+                firstname VARCHAR(50) NOT NULL,
+                lastname VARCHAR(50) NOT NULL,
+                middlename VARCHAR(50) NOT NULL,
                 role VARCHAR(10) NOT NULL CHECK (role IN ('ADMIN', 'USER')),
                 tenant_id UUID REFERENCES tenants(id) ON DELETE SET NULL
             )
@@ -58,6 +59,29 @@ public class DatabaseInitializer {
             stmt.execute(sqlTenants);
             stmt.execute(sqlUsers);
             System.out.println("Tables created/verified successfully.");
+        }
+    }
+
+    // НОВЫЙ МЕТОД: добавляет недостающие колонки при обновлении схемы
+    private static void addMissingColumns() throws SQLException {
+        String[] alterStatements = {
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS firstname VARCHAR(50)",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS lastname VARCHAR(50)",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS middlename VARCHAR(50)"
+        };
+
+        try (var conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+            for (String sql : alterStatements) {
+                try {
+                    stmt.execute(sql);
+                } catch (SQLException e) {
+                    if (!e.getMessage().contains("already exists")) {
+                        System.err.println("Warning: " + e.getMessage());
+                    }
+                }
+            }
+            System.out.println("Missing columns added successfully.");
         }
     }
 }

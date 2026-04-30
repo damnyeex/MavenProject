@@ -11,6 +11,18 @@
                 <BaseInput type="password" v-model="form.password" />
             </div>
             <div class="form-group">
+                <label>Фамилия</label>
+                <BaseInput v-model="form.lastname" required />
+            </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <BaseInput v-model="form.firstname" required />
+            </div>
+            <div class="form-group">
+                <label>Отчество</label>
+                <BaseInput v-model="form.middlename" required />
+            </div>
+            <div class="form-group">
                 <label>Роль</label>
                 <select v-model="form.role" class="base-select">
                     <option value="USER">Пользователь</option>
@@ -63,6 +75,9 @@ const emit = defineEmits(["user-updated", "cancel"]);
 const form = ref({
     login: "",
     password: "",
+    lastname: "",
+    firstname: "",
+    middlename: "",
     role: "",
     tenantId: "",
 });
@@ -93,6 +108,9 @@ const loadTenants = async () => {
 const loadUserData = () => {
     form.value = {
         login: props.currentUserData.login || "",
+        lastname: props.currentUserData.lastname || "",
+        firstname: props.currentUserData.firstname || "",
+        middlename: props.currentUserData.middlename || "",
         password: "",
         role: props.currentUserData.role || "USER",
         tenantId: props.currentUserData.tenantId || null,
@@ -114,6 +132,9 @@ const handleUpdateSubmit = async () => {
             login: form.value.login,
             role: form.value.role,
             tenantId: form.value.tenantId,
+            lastname: form.value.lastname || "",
+            firstname: form.value.firstname || "",
+            middlename: form.value.middlename || "",
         };
 
         if (form.value.password && form.value.password.trim() !== "") {

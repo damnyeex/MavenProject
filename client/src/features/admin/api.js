@@ -7,8 +7,8 @@ export const getAllUsers = async () => {
 };
 
 // Получить пользователя
-export const getOneUser = async () => {
-    const response = await apiClient.get("/users");
+export const getOneUser = async (userId) => {
+    const response = await apiClient.get(`/users/${userId}`);
     return response.data;
 };
 
@@ -19,8 +19,8 @@ export const getAllTenants = async () => {
 };
 
 // Получить тенант
-export const getOneTenant = async () => {
-    const response = await apiClient.get("/tenants");
+export const getOneTenant = async (tenantId) => {
+    const response = await apiClient.get(`/tenants/${tenantId}`);
     return response.data;
 };
 

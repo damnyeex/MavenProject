@@ -20,11 +20,14 @@ public class CheckServlet extends HttpServlet {
         UUID userId = (UUID) req.getAttribute("userId");
         String login = (String) req.getAttribute("login");
         String role = (String) req.getAttribute("role");
-        String newToken = JwtUtil.generateToken(userId, login, role);
+        String lastname = (String) req.getAttribute("lastname");
+        String fistname = (String) req.getAttribute("fistname");
+        String middlename = (String) req.getAttribute("middlename");
+        String newToken = JwtUtil.generateToken(userId, login, role, lastname, fistname, middlename);
         resp.setContentType("application/json");
         resp.getWriter().write(gson.toJson(Map.of(
                 "token", newToken,
-                "user", Map.of("id", userId, "login", login, "role", role)
+                "user", Map.of("id", userId, "login", login, "role", role, "lastname", lastname, "fistname", fistname, "middlename", middlename)
         )));
     }
 }

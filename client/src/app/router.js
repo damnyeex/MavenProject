@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import UsersPage from "../pages/UsersPage.vue";
-import DashboardPage from "../pages/DashboardPage.vue";
-import TenantsPage from "../pages/TenantsPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import AdminPage from "../pages/AdminPage.vue";
 
@@ -17,9 +15,11 @@ const routes = [
         component: AdminPage,
         meta: { requiresAuth: true, requiresAdmin: true },
     },
-    { path: "/users", component: UsersPage, meta: { requiresAuth: true } },
-    { path: "/tenants", component: TenantsPage, meta: { requiresAuth: true } },
-    { path: "/", component: DashboardPage, meta: { requiresAuth: true } },
+    {
+        path: "/users",
+        component: UsersPage,
+        meta: { requiresAuth: true, requiresUser: true },
+    },
 ];
 
 const router = createRouter({
@@ -38,6 +38,11 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.requiresAdmin && userRole !== "ADMIN") {
+        next("/");
+        return;
+    }
+
+    if (to.meta.requiresUser && userRole !== "USER") {
         next("/");
         return;
     }

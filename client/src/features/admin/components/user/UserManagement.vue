@@ -33,6 +33,9 @@
                 <thead>
                     <tr>
                         <th>Логин</th>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
                         <th>Роль</th>
                         <th>Тенант</th>
                         <th>Действия</th>
@@ -41,6 +44,9 @@
                 <tbody>
                     <tr v-for="user in filteredUsers" :key="user.id">
                         <td>{{ user.login }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.middlename }}</td>
                         <td>{{ user.role }}</td>
                         <td>{{ getTenantName(user.tenantId) }}</td>
 
@@ -83,12 +89,13 @@ import BaseButton from "@/shared/ui/BaseButton.vue";
 import UserUpdateForm from "./UserUpdateForm.vue";
 import { getAllUsers, getAllTenants, deleteUser } from "@/features/admin/api";
 import apiClient from "@/shared/api/ApiClient";
+import { useTenants } from "@/shared/composables/useTenants";
 
+const { getTenantName, loadTenants, tenants } = useTenants();
 const emit = defineEmits(["back", "tenant-changed"]);
 
 const users = ref([]);
 const filteredUsers = ref([]);
-const tenants = ref([]);
 const usersLoading = ref(false);
 const currentUserId = ref(null);
 const selectedTenantFilter = ref(null);
@@ -110,23 +117,6 @@ const loadUsers = async () => {
     } finally {
         usersLoading.value = false;
     }
-};
-
-const loadTenants = async () => {
-    try {
-        const response = await getAllTenants();
-        if (response.success) {
-            tenants.value = response.data;
-        }
-    } catch (error) {
-        console.error("Failed to load tenants:", error);
-    }
-};
-
-const getTenantName = (tenantId) => {
-    if (!tenantId) return "—";
-    const tenant = tenants.value.find((t) => t.id === tenantId);
-    return tenant ? tenant.name : "—";
 };
 
 const applyFilter = () => {
@@ -174,17 +164,6 @@ const onUserUpdated = async () => {
     emit("tenant-changed");
 };
 
-const getCurrentUserId = async () => {
-    try {
-        const response = await apiClient.get("/me");
-        if (response.data.success) {
-            currentUserId.value = response.data.data.id;
-        }
-    } catch (error) {
-        console.error("Failed to get current user:", error);
-    }
-};
-
 const refreshTenants = () => {
     loadTenants();
 };
@@ -192,7 +171,6 @@ const refreshTenants = () => {
 onMounted(() => {
     loadUsers();
     loadTenants();
-    getCurrentUserId();
 });
 </script>
 
