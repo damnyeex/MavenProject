@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { getAllTenants, getOneTenant } from "@/features/admin/api";
 
 const tenants = ref(null);
+const tenant = ref(null);
 let loadingPromise = null;
 
 export function useTenants() {

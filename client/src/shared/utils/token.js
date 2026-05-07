@@ -26,3 +26,10 @@ export function getCurrentUserId() {
     const payload = parseJwt(token);
     return payload?.sub || null;
 }
+
+export function getCurrentUserTenantId() {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    const payload = parseJwt(token);
+    return payload?.tenantId || null;
+}

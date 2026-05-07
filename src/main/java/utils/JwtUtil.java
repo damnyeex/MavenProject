@@ -14,7 +14,7 @@ public class JwtUtil {
     );
     private static final long EXPIRATION_MS = 24 * 60 * 60 * 1000; // 24h
 
-    public static String generateToken(UUID userId, String login, String role, String lastname, String firstname, String middlename) {
+    public static String generateToken(UUID userId, String login, String role, String lastname, String firstname, String middlename, String tenantId) {
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("login", login)
@@ -22,6 +22,7 @@ public class JwtUtil {
                 .claim("lastname", lastname)
                 .claim("firstname", firstname)
                 .claim("middlename", middlename)
+                .claim("tenantId", tenantId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(SECRET_KEY)

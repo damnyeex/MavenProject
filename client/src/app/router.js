@@ -1,10 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import UsersPage from "../pages/UsersPage.vue";
-import LoginPage from "../pages/LoginPage.vue";
-import AdminPage from "../pages/AdminPage.vue";
+import UsersPage from "@/pages/UsersPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
+import AdminPage from "@/pages/AdminPage.vue";
+import TenantsPage from "@/pages/TenantsPage.vue";
+import DashboardPage from "@/pages/DashboardPage.vue";
 
 const routes = [
+    {
+        path: "/",
+        name: "tenant-detail",
+        component: DashboardPage,
+        meta: { requiresAuth: true },
+        props: true,
+    },
     {
         path: "/login",
         component: LoginPage,
@@ -19,6 +28,11 @@ const routes = [
         path: "/users",
         component: UsersPage,
         meta: { requiresAuth: true, requiresUser: true },
+    },
+    {
+        path: "/tenants",
+        component: TenantsPage,
+        meta: { requiresAuth: true, requiresAdmin: true },
     },
 ];
 

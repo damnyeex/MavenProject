@@ -4,7 +4,7 @@
             <h2>Сотрудники</h2>
         </div>
 
-        <div v-if="usersLoading" class="loading">Загрузка...</div>
+        <div v-if="usersLoading" class="loading"></div>
         <div v-else-if="users.length === 0" class="empty-state">
             Нет пользователей в вашем отделе
         </div>
@@ -97,6 +97,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     transition: box-shadow 0.2s;
+    cursor: pointer;
 }
 .user-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

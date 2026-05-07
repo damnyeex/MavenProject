@@ -23,7 +23,8 @@ public class CheckServlet extends HttpServlet {
         String lastname = (String) req.getAttribute("lastname");
         String fistname = (String) req.getAttribute("fistname");
         String middlename = (String) req.getAttribute("middlename");
-        String newToken = JwtUtil.generateToken(userId, login, role, lastname, fistname, middlename);
+        String tenantId = (String) req.getAttribute("tenantId");
+        String newToken = JwtUtil.generateToken(userId, login, role, lastname, fistname, middlename, tenantId);
         resp.setContentType("application/json");
         resp.getWriter().write(gson.toJson(Map.of(
                 "token", newToken,

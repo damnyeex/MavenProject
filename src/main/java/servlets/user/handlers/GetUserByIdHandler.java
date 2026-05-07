@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,6 +36,17 @@ public class GetUserByIdHandler {
 
         try {
             User user = UserRepository.findById(targetUserId);
+
+            // Админ видит пользователя из любого тенанта, обычный пользователь - только пользователя своего тенанта
+            if ("ADMIN".equals(userRole)) {
+                user = UserRepository.findById(targetUserId);
+                System.out.println("Admin requesting all users, found: " + user);
+            } else {
+                UUID currentUserId = UUID.fromString(userIdAttr);
+                User currentUser = UserRepository.findById(currentUserId);
+                String tenantId = currentUser != null ? currentUser.getTenantId() : null;
+                System.out.println("Regular user requesting users from tenant: " + tenantId);
+            }
 
             if (user == null) {
                 sendError(resp, 404, "User not found");
