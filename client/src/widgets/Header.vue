@@ -4,20 +4,39 @@
             <router-link
                 v-if="userTenantId && userTenantName"
                 :to="{ name: 'tenant-detail', params: { id: userTenantId } }"
-                class="tenant-link"
+                class="nav-link"
             >
+                <Icon name="Building2" :size="18" />
                 {{ userTenantName }}
             </router-link>
 
-            <div v-else-if="tenantsLoading" class="loading"></div>
+            <span v-else-if="tenantsLoading" class="loading">
+                <Icon name="Loader2" :size="18" class="spinner" />
+            </span>
 
-            <router-link v-if="isUser" to="/users">Пользователи</router-link>
-            <router-link v-if="isAdmin" to="/tenants">Отделы</router-link>
-            <router-link v-if="isAdmin" to="/admin">Админ-панель</router-link>
-            <button @click="logout" class="logout-btn">Выйти</button>
-            <BaseButton variant="secondary" size="small" @click="openMyProfile">
-                Мой профиль
-            </BaseButton>
+            <router-link v-if="isUser" to="/users" class="nav-link"
+                ><Icon name="Users" :size="18" /><span
+                    >Пользователи</span
+                ></router-link
+            >
+            <router-link v-if="isAdmin" to="/tenants" class="nav-link"
+                ><Icon name="Briefcase" :size="18" />
+                <span>Отделы</span></router-link
+            >
+            <router-link v-if="isAdmin" to="/admin" class="nav-link">
+                <Icon name="Shield" :size="18" />
+                <span>Админ-панель</span></router-link
+            >
+            <div class="nav-action">
+                <BaseButton variant="heading" @click="logout">
+                    <Icon name="LogOut" :size="24" />
+                    <span>Выйти</span>
+                </BaseButton>
+                <BaseButton variant="heading" @click="openMyProfile">
+                    <Icon name="UserCircle" :size="24" />
+                    <span>Мой профиль</span>
+                </BaseButton>
+            </div>
         </nav>
         <Modal v-model="showProfileModal" title="Мой профиль">
             <Profile :userId="currentUserId" />
@@ -28,14 +47,12 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { computed, ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
 import Modal from "@/shared/ui/Modal/Modal.vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
 import Profile from "@/features/profile/Profile.vue";
 import { getCurrentUserId, getCurrentUserTenantId } from "@/shared/utils/token";
 import { getOneTenant } from "@/features/admin/api";
-
-import { useTenants } from "@/shared/composables/useTenants";
-const {} = useTenants();
 
 const router = useRouter();
 const showProfileModal = ref(false);
@@ -91,26 +108,65 @@ onMounted(async () => {
 .app-header {
     background-color: #42b983;
     color: white;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
 }
 nav {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
 }
-a {
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
 }
-.logout-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
+.nav-link:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+.router-link-active {
+    border-bottom-color: white;
+}
+.nav-action {
+    display: flex;
+    gap: 1.5rem;
     margin-left: auto;
-    font-size: 1rem;
+}
+.tenant-link {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border-bottom: none;
+}
+.tenant-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-bottom: none;
+}
+.tenant-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

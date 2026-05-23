@@ -2,9 +2,7 @@
     <div class="tenants-management">
         <div class="management-header">
             <h2>Управление отделами (тенантами)</h2>
-            <BaseButton variant="secondary" @click="$emit('back')">
-                ← Назад к админ-панели
-            </BaseButton>
+            <BackButton @click="$emit('back')"><span>Назад</span> </BackButton>
         </div>
 
         <!-- Форма создания -->
@@ -34,7 +32,9 @@
         </div>
 
         <!-- Таблица тенантов -->
-        <div v-if="tenantsLoading" class="loading">Загрузка...</div>
+        <div v-if="tenantsLoading" class="loading">
+            <Icon name="Loader2" :size="18" class="spinner" />
+        </div>
         <div v-else class="tenants-table">
             <table>
                 <thead>
@@ -89,9 +89,15 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
 import BaseInput from "@/shared/ui/BaseInput.vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
-import { getAllTenants, createTenant, deleteTenant } from "../../api";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
+import BackButton from "@/shared/ui/Button/BackButton.vue";
+import {
+    getAllTenants,
+    createTenant,
+    deleteTenant,
+} from "@/features/admin/api";
 import TenantUpdateForm from "./TenantUpdateForm.vue";
 
 const emit = defineEmits(["back", "tenant-changed"]);

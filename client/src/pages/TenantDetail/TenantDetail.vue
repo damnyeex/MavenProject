@@ -2,13 +2,15 @@
     <div class="tenant-page">
         <div class="page-header">
             <div class="header-actions">
-                <BaseButton variant="secondary" @click="$emit('back')">
-                    ← Назад к списку отделов
-                </BaseButton>
+                <BackButton @click="$emit('back')">
+                    Назад к списку отделов
+                </BackButton>
             </div>
         </div>
 
-        <div v-if="tenantLoading" class="loading"></div>
+        <div v-if="tenantLoading" class="loading">
+            <Icon name="Loader2" :size="18" class="spinner" />
+        </div>
 
         <div v-else-if="error" class="error-message">
             {{ error }}
@@ -18,6 +20,7 @@
             <div class="tenant-info-header">
                 <h2>{{ tenantData.name }}</h2>
                 <p class="tenant-stats">
+                    <Icon name="Users" :size="18" />
                     Всего сотрудников: {{ tenantData.userCount || 0 }}
                 </p>
             </div>
@@ -25,7 +28,7 @@
             <h3 class="users-title">Сотрудники отдела</h3>
 
             <div v-if="usersLoading" class="loading">
-                Загрузка сотрудников...
+                <Icon name="Loader2" :size="18" class="spinner" />
             </div>
             <div v-else-if="users.length === 0" class="empty-state">
                 В этом отделе пока нет сотрудников
@@ -43,8 +46,10 @@
                             variant="secondary"
                             size="small"
                             @click="openProfile(user)"
+                            class="details-button"
                         >
-                            Подробнее
+                            <Icon name="Eye" :size="18" />
+                            <span>Подробнее</span>
                         </BaseButton>
                     </div>
                 </li>
@@ -59,7 +64,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
+import BackButton from "@/shared/ui/Button/BackButton.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
 import Modal from "@/shared/ui/Modal/Modal.vue";
 import Profile from "@/features/profile/Profile.vue";
 import { getOneTenant } from "@/features/admin/api";
@@ -121,6 +128,7 @@ onMounted(() => {
     padding: 20px;
 }
 .page-header {
+    display: flex;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e9ecef;
@@ -177,13 +185,15 @@ onMounted(() => {
 .user-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.user-info {
-    flex: 1;
-}
 .user-name {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 6px;
+}
+.details-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 .empty-state {
     text-align: center;

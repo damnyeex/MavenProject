@@ -5,7 +5,9 @@
                 <h2>Отделы</h2>
             </div>
 
-            <div v-if="tenantsLoading" class="loading">Загрузка...</div>
+            <div v-if="tenantsLoading" class="loading">
+                <Icon name="Loader2" :size="18" class="spinner" />
+            </div>
             <div
                 v-else-if="!tenants || tenants.length === 0"
                 class="empty-state"
@@ -30,8 +32,10 @@
                             @click="
                                 (openTenant(tenant), (currentView = 'detail'))
                             "
+                            class="details-button"
                         >
-                            Подробнее
+                            <Icon name="Eye" :size="18" />
+                            <span>Подробнее</span>
                         </BaseButton>
                     </div>
                 </li>
@@ -48,7 +52,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
 import { useTenants } from "@/shared/composables/useTenants";
 import TenantDetail from "@/pages/TenantDetail/TenantDetail.vue";
 
@@ -73,6 +78,7 @@ onMounted(async () => {
     padding: 20px;
 }
 .page-header {
+    display: flex;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e9ecef;
@@ -99,13 +105,15 @@ onMounted(async () => {
 .tenant-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.tenant-info {
-    flex: 1;
-}
 .tenant-name {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 6px;
+}
+.details-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 .empty-state {
     text-align: center;

@@ -1,6 +1,8 @@
 <template>
     <div class="profile-view">
-        <div v-if="loading" class="loading">Загрузка...</div>
+        <div v-if="loading" class="loading">
+            <Icon name="Loader2" :size="18" class="spinner" />
+        </div>
         <div v-else-if="userData" class="profile-content">
             <div class="profile-field">
                 <label>Фамилия:</label>
@@ -34,6 +36,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
 import { getOneUser } from "@/features/admin/api";
 import { useTenants } from "@/shared/composables/useTenants";
 

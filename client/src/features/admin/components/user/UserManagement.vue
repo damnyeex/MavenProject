@@ -2,13 +2,14 @@
     <div class="users-management">
         <div class="management-header">
             <h2>Управление пользователями</h2>
-            <BaseButton variant="secondary" @click="$emit('back')">
-                ← Назад к админ-панели
-            </BaseButton>
+            <BackButton @click="$emit('back')"><span>Назад</span> </BackButton>
         </div>
+
+        <UserRegistrationForm @user-created="onUserCreated" />
 
         <!-- Фильтр по отделам -->
         <div class="filter-section">
+            <Icon name="Filter" :size="18" class="filter-icon" />
             <label>Фильтр по отделу:</label>
             <select
                 v-model="selectedTenantFilter"
@@ -27,7 +28,10 @@
         </div>
 
         <!-- Таблица пользователей -->
-        <div v-if="usersLoading" class="loading">Загрузка...</div>
+        <div v-if="usersLoading" class="loading">
+            <Icon name="Loader2" :size="18" class="spinner" />
+        </div>
+
         <div v-else class="users-table">
             <table>
                 <thead>
@@ -85,7 +89,10 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
+import BackButton from "@/shared/ui/Button/BackButton.vue";
+import UserRegistrationForm from "@/features/admin/components/user/UserRegistrationForm.vue";
 import UserUpdateForm from "./UserUpdateForm.vue";
 import { getAllUsers, getAllTenants, deleteUser } from "@/features/admin/api";
 import apiClient from "@/shared/api/ApiClient";
@@ -165,6 +172,11 @@ const onUserUpdated = async () => {
 };
 
 const refreshTenants = () => {
+    loadTenants();
+};
+
+const onUserCreated = () => {
+    loadUsers();
     loadTenants();
 };
 

@@ -55,8 +55,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import BaseInput from "@/shared/ui/BaseInput.vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
-import { createUser, getAllTenants } from "../../api";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
+import { createUser, getAllTenants } from "@/features/admin/api";
 
 const emit = defineEmits(["user-created"]);
 

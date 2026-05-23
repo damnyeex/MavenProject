@@ -16,7 +16,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
 import { getOneTenant } from "@/features/admin/api";
 import { getCurrentUserTenantId } from "../shared/utils/token";
 

@@ -4,7 +4,9 @@
             <h2>Сотрудники</h2>
         </div>
 
-        <div v-if="usersLoading" class="loading"></div>
+        <div v-if="usersLoading" class="loading">
+            <Icon name="Loader2" :size="18" class="spinner" />
+        </div>
         <div v-else-if="users.length === 0" class="empty-state">
             Нет пользователей в вашем отделе
         </div>
@@ -15,14 +17,20 @@
                         {{ user.lastname }} {{ user.firstname }}
                         {{ user.middlename }}
                     </div>
+                    <div class="user-meta">
+                        <Icon name="AtSign" :size="16" />
+                        <span>{{ user.login }}</span>
+                    </div>
                 </div>
                 <div class="user-actions">
                     <BaseButton
                         variant="secondary"
                         size="small"
                         @click="openProfile(user)"
+                        class="details-button"
                     >
-                        Подробнее
+                        <Icon name="Eye" :size="18" />
+                        <span>Подробнее</span>
                     </BaseButton>
                 </div>
             </li>
@@ -36,7 +44,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
+import Icon from "@/shared/ui/Icon/Icon.vue";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
 import Modal from "@/shared/ui/Modal/Modal.vue";
 import Profile from "@/features/profile/Profile.vue";
 import { getAllUsers, getAllTenants } from "@/features/admin/api";
@@ -79,6 +88,8 @@ onMounted(() => {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 12px;
 }
 .users-list {
     list-style: none;
@@ -102,9 +113,6 @@ onMounted(() => {
 .user-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.user-info {
-    flex: 1;
-}
 .user-name {
     font-weight: bold;
     font-size: 1.1rem;
@@ -116,15 +124,47 @@ onMounted(() => {
     color: #6c757d;
     margin-top: 4px;
 }
+.user-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+.details-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
 .empty-state {
     text-align: center;
-    padding: 40px;
+    padding: 60px;
     color: #6c757d;
     background: #f8f9fa;
-    border-radius: 8px;
+    border-radius: 12px;
+}
+.empty-state svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
 }
 .loading {
-    text-align: center;
-    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px;
+    color: #6c757d;
+}
+.spinner {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

@@ -26,8 +26,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import BaseInput from "@/shared/ui/BaseInput.vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
-import { updateTenant } from "../../api";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
+import { updateTenant } from "@/features/admin/api";
 
 const props = defineProps({
     tenantId: { type: String, required: true },

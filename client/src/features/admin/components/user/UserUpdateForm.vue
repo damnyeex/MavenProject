@@ -60,8 +60,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import BaseInput from "@/shared/ui/BaseInput.vue";
-import BaseButton from "@/shared/ui/BaseButton.vue";
-import { updateUser, getAllTenants } from "../../api";
+import BaseButton from "@/shared/ui/Button/BaseButton.vue";
+import { updateUser, getAllTenants } from "@/features/admin/api";
 
 const props = defineProps({
     userId: { type: String, required: true },
